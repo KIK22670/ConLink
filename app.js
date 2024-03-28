@@ -289,6 +289,29 @@ app.post('/speichereTermin', async (req, res) => {
 
 });
 
+
+app.post('/storniereTermin', async (req, res) => {
+  try {
+    const terminID = req.body.terminID;
+
+    // SQL-Abfrage zum Löschen des Termins aus der Datenbank
+    const deleteQuery = {
+      text: 'DELETE FROM t_termine WHERE t_id = $1',
+      values: [terminID],
+    };
+
+    // Ausführen der SQL-Abfrage
+    await client.query(deleteQuery);
+
+    // Erfolgsmeldung senden
+    res.status(200).json({ message: 'Termin wurde erfolgreich storniert' });
+  } catch (error) {
+    console.error('Fehler beim Stornieren des Termins:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 app.get('/holetermine', async (req, res) => {
   try {
     // Get the user ID from the session
@@ -320,6 +343,9 @@ app.get('/holetermine', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
 
 
 app.listen(port, () => {

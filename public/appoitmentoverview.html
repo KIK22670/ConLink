@@ -60,9 +60,56 @@
       margin-top: -75px;
     }
 
+    /* Stil für die Tabelle */
     .resulttable {
-      margin-right: 35%;
+      margin-right: 50%;
+      width: 80%;
+      /* Breite der Tabelle */
+      border-collapse: collapse;
+      margin-top: 20px;
+      /* Platz oberhalb der Tabelle */
+    }
 
+    /* Stil für Tabellenüberschriften */
+    .resulttable th {
+      background-color: #1b9aaa;
+      /* Hintergrundfarbe der Überschriften */
+      color: #ffffff;
+      /* Schriftfarbe der Überschriften */
+      padding: 10px;
+      /* Innenabstand der Überschriften */
+      text-align: left;
+      /* Linksbündige Ausrichtung der Überschriften */
+    }
+
+    /* Stil für Tabellenzeilen */
+    .resulttable td {
+      border: 1px solid #ddd;
+      /* Rahmen um Zellen */
+      padding: 8px;
+      /* Innenabstand der Zellen */
+    }
+
+    /* Stil für abwechselnde Zeilen */
+    .resulttable tr:nth-child(even) {
+      background-color: #f2f2f2;
+      /* Hintergrundfarbe für gerade Zeilen */
+    }
+
+    /* Stil für Hover-Zustand */
+    .resulttable tr:hover {
+      background-color: #ddd;
+      /* Hintergrundfarbe beim Überfahren mit der Maus */
+    }
+
+    .resulttable td button {
+      background-color: rgb(169, 24, 24);
+      border: none;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   </style>
 </head>
@@ -157,6 +204,7 @@
           <tr>
             <th scope="col">Datum</th>
             <th scope="col">Typ</th>
+            <th scope="col">Stornieren</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -180,45 +228,56 @@
       const table = document.querySelector("tbody");
       table.innerHTML = '';
 
-      // Fetch all appointments -- <td>${new Date(appointment.appointmentDate).toLocaleString()}</td>
+      // Fetch all appointments
       fetch("/holetermine")
         .then((response) => response.json())
         .then((appointments) => {
 
           appointments.filter(a => new Date(a.appointmentDate) <= dateTo && new Date(a.appointmentDate) >= dateFrom).forEach((appointment) => {
             const tr = document.createElement("tr");
+            tr.id = `appointment-${appointment.terminID}`; // Add unique ID
             tr.innerHTML = `
                         <td>${format_date(new Date(appointment.appointmentDate))}</td>
                         <td>${appointment.appointmentTyp}</td>
+                        <td><button class="btn btn-danger btn-sm" onclick="storniereTermin(${appointment.terminID})"><i class="bi bi-x-circle"></i></button></td>
                       `;
             table.appendChild(tr);
           });
         });
     }
 
+    // JavaScript-Code innerhalb von <script> tags in appointmentoverview.html
+    function storniereTermin(terminID) {
+      // AJAX-Anfrage zum Stornieren des Termins
+      $.ajax({
+        url: '/storniereTermin',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ terminID: terminID }),
+        success: function (response) {
+          // Überprüfen Sie die Antwort des Servers
+          if (response.message === 'Termin wurde erfolgreich storniert') {
+            // Wenn der Termin erfolgreich storniert wurde, entfernen Sie die entsprechende Zeile aus der Tabelle
+            const row = document.getElementById(`appointment-${terminID}`);
+            if (row) {
+              row.parentNode.removeChild(row);
+              console.log('Termin erfolgreich storniert');
+            } else {
+              console.error('Fehler: Terminzeile nicht gefunden');
+            }
+          } else {
+            console.error('Fehler beim Stornieren des Termins:', response.error);
+          }
+        },
+        error: function (error) {
+          console.error('Fehler beim Stornieren des Termins:', error);
+        }
+      });
+    }
 
 
   </script>
 
-  <!-- Footer -->
-  <!-- Hier wird der Footer von der Home-Seite wiederverwendet --
-    <div class="container-fluid bg-dark text-light border-top border-secondary py-4">
-        <div class="container">
-            <div class="row g-5">
-                <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <a class="text-primary" href="#">ConLink</a>. All Rights Reserved.
-                    </p>
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <a href="impressum.html" style="margin-right: 10px;">Impressum</a>
-                    <a href="datenschutz.html">Datenschutz</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    !-- Ende Footer -->
-
-  <!-- JavaScript-Bibliotheken -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
