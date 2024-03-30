@@ -267,7 +267,7 @@ app.get('/ladeStammdaten', async (req, res) => {
 app.post('/speichereTermin', async (req, res) => {
   const { doctorId, selectedDate, kategorie } = req.body;//patientID
   console.log("DATUM:", selectedDate, "DoctorID:", doctorId, "Kategorie:", kategorie);//"PatientID:",patientID
-  const datetime = Date.parse(req.selectedDate);
+  const datetime = Date.parse(selectedDate);
   console.log(datetime);
 
   try {
@@ -311,6 +311,10 @@ app.post('/storniereTermin', async (req, res) => {
   }
 });
 
+app.get('/aktualisiereTermin', (req, res) => {
+  // Hier können Sie die Logik für die Behandlung der GET-Anfrage implementieren
+  res.send('GET-Anfrage an /aktualisiereTermin erfolgreich verarbeitet.');
+});
 
 app.get('/holetermine', async (req, res) => {
   try {
@@ -344,10 +348,7 @@ app.get('/holetermine', async (req, res) => {
   }
 });
 
-
-
-
-
+// Starten Sie den Server und lauschen Sie auf dem angegebenen Port
 app.listen(port, () => {
-  console.log(`App läuft auf Port ${port}`);
+  console.log(`Server läuft auf http://localhost:${port}`);
 });

@@ -111,6 +111,15 @@
       justify-content: center;
       align-items: center;
     }
+
+     /* Stil für das Kalender-Popup */
+     .modal-body {
+      text-align: center;
+    }
+
+    .datepicker {
+      width: 100%;
+    }
   </style>
 </head>
 
@@ -204,14 +213,61 @@
           <tr>
             <th scope="col">Datum</th>
             <th scope="col">Typ</th>
+            <th scope="col">Umbuchen</th>
             <th scope="col">Stornieren</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
     </div>
-
   </div>
+
+   <!-- Modal für die Terminbearbeitung -->
+   <div class="modal fade" id="editAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="editAppointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editAppointmentModalLabel">Termin bearbeiten</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formular für die Bearbeitung des Termins -->
+          <form id="editAppointmentForm">
+            <!-- Hier die Eingabefelder für die Bearbeitung des Termins einfügen -->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+          <button type="button" class="btn btn-primary" onclick="speichereBearbeitetenTermin()">Speichern</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal für die Auswahl des neuen Termins -->
+<div class="modal fade" id="selectNewDateModal" tabindex="-1" role="dialog" aria-labelledby="selectNewDateModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="selectNewDateModalLabel">Neuen Termin wählen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Kalender-Popup -->
+        <input type="text" class="form-control datepicker" id="newAppointmentDate" placeholder="Wählen Sie das neue Datum" />
+        <input type="text" class="form-control timepicker" id="newAppointmentTime" placeholder="Wählen Sie die Uhrzeit" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+        <button type="button" class="btn btn-primary" onclick="speichereNeuenTermin()">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -239,6 +295,8 @@
             tr.innerHTML = `
                         <td>${format_date(new Date(appointment.appointmentDate))}</td>
                         <td>${appointment.appointmentTyp}</td>
+                        
+                  <td><button class="btn btn-warning btn-sm" onclick="bearbeiteTermin(${appointment.id})"><i class="bi bi-pencil"></i></button></td>
                         <td><button class="btn btn-danger btn-sm" onclick="storniereTermin(${appointment.terminID})"><i class="bi bi-x-circle"></i></button></td>
                       `;
             table.appendChild(tr);
@@ -275,13 +333,77 @@
       });
     }
 
+     $(document).ready(function() {
+    // Datepicker initialisieren
+    $('.datepicker').datepicker({
+      format: 'dd.mm.yyyy',
+      autoclose: true,
+      todayHighlight: true
+    });
+
+    // Timepicker initialisieren
+    $('.timepicker').timepicker({
+      minuteStep: 15,
+      defaultTime: false
+    });
+  });
+
+  function bearbeiteTermin(terminID) {
+    console.log("Termin bearbeiten: " + terminID);
+    // Hier öffnen Sie das Kalender-Popup
+    $('#selectNewDateModal').modal('show');
+
+    // Speichern Sie die ID des zu bearbeitenden Termins global
+    window.editingAppointmentID = terminID;
+}
+
+// Funktion zum Speichern des neuen Termins
+function speichereNeuenTermin() {
+    const newDate = $('#newAppointmentDate').val();
+    const newTime = $('#newAppointmentTime').val();
+    const oldAppointmentID = window.editingAppointmentID;
+
+    console.log('Neuer Termin: Datum:', newDate, 'Uhrzeit:', newTime, 'Termin-ID:', oldAppointmentID);
+
+    // AJAX-Anfrage zum Aktualisieren des Termins
+    $.ajax({
+        url: '/aktualisiereTermin', // Passen Sie die URL entsprechend Ihrer Serverendpunkte an
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            oldAppointmentID: oldAppointmentID,
+            newDate: newDate,
+            newTime: newTime
+        }),
+        success: function (response) {
+            // Überprüfen Sie die Antwort des Servers
+            if (response.success) {
+                console.log('Termin erfolgreich aktualisiert:', response.message);
+                // Aktualisieren Sie die Terminanzeige auf der Benutzeroberfläche
+                holeTermine();
+                // Schließen Sie das Modal
+                $('#selectNewDateModal').modal('hide');
+            } else {
+                console.error('Fehler beim Aktualisieren des Termins:', response.error);
+            }
+        },
+        error: function (error) {
+            console.error('Fehler beim Aktualisieren des Termins:', error);
+        }
+    });
+}
+
+
 
   </script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/main.js"></script>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+
 </body>
 
 </html>
