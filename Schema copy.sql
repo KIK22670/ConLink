@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS p_patienten (
   p_a_behandelnderArzt INT REFERENCES a_aerzte(a_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
  
+
+
 -- Tabelle `t_termine` erstellen
 CREATE TABLE IF NOT EXISTS t_termine (
   t_id SERIAL PRIMARY KEY,
@@ -42,7 +44,7 @@ CREATE TABLE IF NOT EXISTS t_termine (
   t_a_id INT REFERENCES a_aerzte(a_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   t_tt_id INT,
   t_z_id INT
-);
+); 
  
 -- Tabelle `b_bewertungen` erstellen
 CREATE TABLE IF NOT EXISTS b_bewertungen (
@@ -218,3 +220,5 @@ CREATE TABLE IF NOT EXISTS verification_tokens (
   token VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+

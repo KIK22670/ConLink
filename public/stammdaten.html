@@ -165,67 +165,45 @@
         </div>
     </div>
 
+    <!-- Erfolgreiches Speichern Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Erfolgreich gespeichert</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Die Stammdaten wurden erfolgreich gespeichert.
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Fehler beim Speichern Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Fehler beim Speichern</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Es ist ein Fehler beim Speichern der Stammdaten aufgetreten. Bitte versuchen Sie es erneut.
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <script>
-
-        /* window.onload = async function loadStammdaten() {
-            try {
-                const response = await fetch('/ladeStammdaten');
-                const data = await response.json();
-                const stammdaten = data.stammdaten;
-
-                // Formularfelder mit den geladenen Daten füllen
-                document.getElementById('p_vorname').value = stammdaten.vorname;
-                document.getElementById('p_nachname').value = stammdaten.nachname;
-                document.getElementById('p_email').value = stammdaten.email;
-                document.getElementById('p_telefonnummer').value = stammdaten.telefonnummer;
-                document.getElementById('p_svnr').value = stammdaten.svnr;
-                document.getElementById('p_allergien').value = stammdaten.allergien;
-                document.getElementById('p_vorerkrankungen').value = stammdaten.vorerkrankungen;
-                document.getElementById('p_medikamente').value = stammdaten.medikamente;
-            } catch (error) {
-                console.error('Fehler beim Laden der Stammdaten:', error);
-            }
-        };
-
-
-        function stammdatenSpeichern() {
-            const vorname = document.getElementById('p_vorname').value;
-            const nachname = document.getElementById('p_nachname').value;
-            const email = document.getElementById('p_email').value;
-            const telefonnummer = document.getElementById('p_telefonnummer').value;
-            const svnr = document.getElementById('p_svnr').value;
-            const allergien = document.getElementById('p_allergien').value;
-            const vorerkrankungen = document.getElementById('p_vorerkrankungen').value;
-            const medikamente = document.getElementById('p_medikamente').value;
-
-
-
-            fetch('/speichereStammdaten', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    vorname: vorname,
-                    nachname: nachname,
-                    email: email,
-                    telefonnummer: telefonnummer,
-                    svnr: svnr,
-                    allergien: allergien,
-                    vorerkrankungen: vorerkrankungen,
-                    medikamente: medikamente
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Stammdaten erfolgreich gespeichert:', data);
-                    // Fügen Sie hier weitere Aktionen nach erfolgreicher Speicherung hinzu
-                })
-                .catch(error => {
-                    console.error('Fehler beim Speichern der Stammdaten:', error);
-                    // Fügen Sie hier Aktionen für den Fall eines Fehlers hinzu
-                });
-        } */
 
         let isEditing = false;
 
@@ -255,30 +233,6 @@
                 });
         }
 
-        /* 
-                window.onload = loadStammdaten;
-        
-                async function loadStammdaten() {
-                    try {
-                        const response = await fetch('/ladeStammdaten');
-                        const data = await response.json();
-                        const stammdaten = data.stammdaten;
-        
-                        // Formularfelder mit den geladenen Daten füllen
-                        document.getElementById('p_vorname').value = stammdaten.vorname;
-                        document.getElementById('p_nachname').value = stammdaten.nachname;
-                        document.getElementById('p_email').value = stammdaten.email;
-                        document.getElementById('p_telefonnummer').value = stammdaten.telefonnummer;
-                        document.getElementById('p_svnr').value = stammdaten.svnr;
-                        document.getElementById('p_allergien').value = stammdaten.allergien;
-                        document.getElementById('p_vorerkrankungen').value = stammdaten.vorerkrankungen;
-                        document.getElementById('p_medikamente').value = stammdaten.medikamente;
-        
-                        toggleEditMode(false); // Start im Lesemodus
-                    } catch (error) {
-                        console.error('Fehler beim Laden der Stammdaten:', error);
-                    }
-                }; */
 
         function toggleEditMode(editMode) {
             isEditing = editMode;
@@ -317,16 +271,36 @@
                     medikamente: medikamente
                 })
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Stammdaten erfolgreich gespeichert:', data);
-                    toggleEditMode(false); // Zurück zum Lesemodus nach dem Speichern
+                .then(response => {
+                    if (response.ok) {
+                        // Wenn die Antwort erfolgreich ist, zeigen Sie das Erfolgs-Pop-up an
+                        $('#successModal').modal('show');
+                        toggleEditMode(false); // Zurück zum Lesemodus nach dem Speichern
+                    } else {
+                        // Wenn die Antwort einen Fehlerstatuscode hat, zeigen Sie das Fehler-Pop-up an
+                        $('#errorModal').modal('show');
+                    }
                 })
                 .catch(error => {
                     console.error('Fehler beim Speichern der Stammdaten:', error);
+                    // Falls ein Fehler auftritt, zeigen Sie das Fehler-Pop-up an
+                    $('#errorModal').modal('show');
                 });
+            /*  .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Erfolgreiches Speichern
+                        $('#successModal').modal('show'); // Anzeige des Pop-ups
+                        toggleEditMode(false); // Zurück zum Lesemodus nach dem Speichern
+                    } else {
+                        // Fehler beim Speichern
+                        $('#errorModal').modal('show'); // Anzeige des Fehler-Pop-ups
+                    }
+                })
+                .catch(error => {
+                    console.error('Fehler beim Speichern der Stammdaten:', error);
+                }); */
         }
-
         document.getElementById('editButton').addEventListener('click', function () {
             toggleEditMode(true); // Wechsel in den Bearbeitungsmodus
         });
@@ -334,34 +308,40 @@
 
     </script>
 
-    <!-- Footer aus der Home-Seite -->
-    <div class="container-fluid bg-dark text-light border-top border-secondary py-4">
-        <div class="container">
-            <div class="row g-5">
-                <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <a class="text-primary" href="#">ConLink</a></p>
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <a href="impressum.html" style="margin-right: 10px;">Impressum</a>
-                    <a href="datenschutz.html">Datenschutz</a>
-                </div>
+
+</body>
+
+
+<!-- Footer aus der Home-Seite -->
+<div class="container-fluid bg-dark text-light border-top border-secondary py-4">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-md-0">&copy; <a class="text-primary" href="#">ConLink</a></p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <a href="impressum.html" style="margin-right: 10px;">Impressum</a>
+                <a href="datenschutz.html">Datenschutz</a>
             </div>
         </div>
     </div>
-    <!-- Ende Footer -->
+</div>
+<!-- Ende Footer -->
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="lib/tempusdominus/js/moment.min.js"></script>
+<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+
+<!-- Template Javascript -->
+<script src="js/main.js"></script>
 </body>
 
 </html>
