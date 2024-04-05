@@ -62,12 +62,14 @@
 
     /* Stil für die Tabelle */
     .resulttable {
-      margin-right: 50%;
-      width: 80%;
-      /* Breite der Tabelle */
+      margin: 0 auto;
+      /* Zentriert die Tabelle */
+      width: 100%;
+      /* Breite auf 100% setzen */
+      max-width: 1200px;
+      /* Maximale Breite der Tabelle */
       border-collapse: collapse;
       margin-top: 20px;
-      /* Platz oberhalb der Tabelle */
     }
 
     /* Stil für Tabellenüberschriften */
@@ -76,7 +78,7 @@
       /* Hintergrundfarbe der Überschriften */
       color: #ffffff;
       /* Schriftfarbe der Überschriften */
-      padding: 10px;
+      padding: 15px;
       /* Innenabstand der Überschriften */
       text-align: left;
       /* Linksbündige Ausrichtung der Überschriften */
@@ -86,7 +88,7 @@
     .resulttable td {
       border: 1px solid #ddd;
       /* Rahmen um Zellen */
-      padding: 8px;
+      padding: 15px;
       /* Innenabstand der Zellen */
     }
 
@@ -112,13 +114,20 @@
       align-items: center;
     }
 
-     /* Stil für das Kalender-Popup */
-     .modal-body {
+    /* Stil für das Kalender-Popup */
+    .modal-body {
       text-align: center;
     }
 
     .datepicker {
       width: 100%;
+    }
+
+    .resulttable th:first-child,
+    .resulttable td:first-child {
+      visibility: hidden;
+      border-width: 0;
+      /* Randbreite auf 0 setzen */
     }
   </style>
 </head>
@@ -211,9 +220,10 @@
       <table class="table table-striped">
         <thead>
           <tr>
+            <th scope="col">Termin</th>
             <th scope="col">Datum</th>
             <th scope="col">Typ</th>
-            <th scope="col">Umbuchen</th>
+            <th scope="col">Notiz</th>
             <th scope="col">Stornieren</th>
           </tr>
         </thead>
@@ -222,8 +232,9 @@
     </div>
   </div>
 
-   <!-- Modal für die Terminbearbeitung -->
-   <div class="modal fade" id="editAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="editAppointmentModalLabel" aria-hidden="true">
+  <!-- Modal für die Terminbearbeitung -->
+  <div class="modal fade" id="editAppointmentModal" tabindex="-1" role="dialog"
+    aria-labelledby="editAppointmentModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -247,27 +258,30 @@
   </div>
 
   <!-- Modal für die Auswahl des neuen Termins -->
-<div class="modal fade" id="selectNewDateModal" tabindex="-1" role="dialog" aria-labelledby="selectNewDateModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="selectNewDateModalLabel">Neuen Termin wählen</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- Kalender-Popup -->
-        <input type="text" class="form-control datepicker" id="newAppointmentDate" placeholder="Wählen Sie das neue Datum" />
-        <input type="text" class="form-control timepicker" id="newAppointmentTime" placeholder="Wählen Sie die Uhrzeit" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
-        <button type="button" class="btn btn-primary" onclick="speichereNeuenTermin()">Speichern</button>
+  <div class="modal fade" id="selectNewDateModal" tabindex="-1" role="dialog" aria-labelledby="selectNewDateModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="selectNewDateModalLabel">Neue Notiz hinzufügen</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Notizfeld -->
+          <textarea class="form-control" id="newAppointmentNote" placeholder="Notiz hinzufügen"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+          <button type="button" class="btn btn-primary" onclick="speichereNotiz()">Speichern</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+
+
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -291,107 +305,85 @@
 
           appointments.filter(a => new Date(a.appointmentDate) <= dateTo && new Date(a.appointmentDate) >= dateFrom).forEach((appointment) => {
             const tr = document.createElement("tr");
-            tr.id = `appointment-${appointment.terminID}`; // Add unique ID
             tr.innerHTML = `
-                        <td>${format_date(new Date(appointment.appointmentDate))}</td>
-                        <td>${appointment.appointmentTyp}</td>
-                        
-                  <td><button class="btn btn-warning btn-sm" onclick="bearbeiteTermin(${appointment.id})"><i class="bi bi-pencil"></i></button></td>
-                        <td><button class="btn btn-danger btn-sm" onclick="storniereTermin(${appointment.terminID})"><i class="bi bi-x-circle"></i></button></td>
-                      `;
+              <td>${appointment.appointmentID}</td>
+             <td>${new Date(appointment.appointmentDate).toLocaleString()}</td>
+             <td>${appointment.appointmentTyp}</td>
+             <td><button class="btn btn-warning btn-sm" onclick="bearbeiteTermin(${appointment.id})"><i class="bi bi-pencil"></i></button></td>
+             <td><button id="appointment-${appointment.appointmentID}" class="btn btn-danger btn-sm" onclick="storniereTermin(${appointment.appointmentID})"><i class="bi bi-x-circle"></i></button></td>
+              `;
             table.appendChild(tr);
           });
         });
     }
 
-    // JavaScript-Code innerhalb von <script> tags in appointmentoverview.html
-    function storniereTermin(terminID) {
-      // AJAX-Anfrage zum Stornieren des Termins
-      $.ajax({
-        url: '/storniereTermin',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ terminID: terminID }),
-        success: function (response) {
-          // Überprüfen Sie die Antwort des Servers
-          if (response.message === 'Termin wurde erfolgreich storniert') {
-            // Wenn der Termin erfolgreich storniert wurde, entfernen Sie die entsprechende Zeile aus der Tabelle
-            const row = document.getElementById(`appointment-${terminID}`);
-            if (row) {
-              row.parentNode.removeChild(row);
-              console.log('Termin erfolgreich storniert');
+
+    function storniereTermin(appointmentID) {
+      // Bestätigungsdialog anzeigen
+      if (confirm("Möchten Sie diesen Termin wirklich stornieren?")) {
+        // AJAX-Anfrage zum Stornieren des Termins
+        $.ajax({
+          url: '/storniereTermin',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ appointmentID: appointmentID }),
+          success: function (response) {
+            // Überprüfen Sie die Antwort des Servers
+            if (response.message === 'Termin wurde erfolgreich storniert') {
+              // Wenn der Termin erfolgreich storniert wurde, entfernen Sie die gesamte Zeile aus der Tabelle
+              const row = document.getElementById(`appointment-${appointmentID}`).closest('tr');
+              if (row) {
+                // Die Zeile entfernen
+                row.parentNode.removeChild(row);
+                console.log('Termin erfolgreich storniert');
+              } else {
+                console.error('Fehler: Terminzeile nicht gefunden');
+              }
             } else {
-              console.error('Fehler: Terminzeile nicht gefunden');
+              console.error('Fehler beim Stornieren des Termins:', response.error);
             }
-          } else {
-            console.error('Fehler beim Stornieren des Termins:', response.error);
+          },
+          error: function (error) {
+            console.error('Fehler beim Stornieren des Termins:', error);
           }
-        },
-        error: function (error) {
-          console.error('Fehler beim Stornieren des Termins:', error);
-        }
-      });
+        });
+      }
     }
 
-     $(document).ready(function() {
-    // Datepicker initialisieren
-    $('.datepicker').datepicker({
-      format: 'dd.mm.yyyy',
-      autoclose: true,
-      todayHighlight: true
-    });
 
-    // Timepicker initialisieren
-    $('.timepicker').timepicker({
-      minuteStep: 15,
-      defaultTime: false
-    });
-  });
 
-  function bearbeiteTermin(terminID) {
-    console.log("Termin bearbeiten: " + terminID);
-    // Hier öffnen Sie das Kalender-Popup
-    $('#selectNewDateModal').modal('show');
-
-    // Speichern Sie die ID des zu bearbeitenden Termins global
-    window.editingAppointmentID = terminID;
-}
-
-// Funktion zum Speichern des neuen Termins
-function speichereNeuenTermin() {
-    const newDate = $('#newAppointmentDate').val();
-    const newTime = $('#newAppointmentTime').val();
-    const oldAppointmentID = window.editingAppointmentID;
-
-    console.log('Neuer Termin: Datum:', newDate, 'Uhrzeit:', newTime, 'Termin-ID:', oldAppointmentID);
-
-    // AJAX-Anfrage zum Aktualisieren des Termins
-    $.ajax({
-        url: '/aktualisiereTermin', // Passen Sie die URL entsprechend Ihrer Serverendpunkte an
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            oldAppointmentID: oldAppointmentID,
-            newDate: newDate,
-            newTime: newTime
-        }),
-        success: function (response) {
-            // Überprüfen Sie die Antwort des Servers
-            if (response.success) {
-                console.log('Termin erfolgreich aktualisiert:', response.message);
-                // Aktualisieren Sie die Terminanzeige auf der Benutzeroberfläche
-                holeTermine();
-                // Schließen Sie das Modal
-                $('#selectNewDateModal').modal('hide');
-            } else {
-                console.error('Fehler beim Aktualisieren des Termins:', response.error);
-            }
-        },
-        error: function (error) {
-            console.error('Fehler beim Aktualisieren des Termins:', error);
+    /* function loescheTermin(appointmentID) {
+      console.log('Termin-ID:', appointmentID); // Überprüfen Sie die Termin-ID
+      if (confirm("Möchten Sie diesen Termin wirklich stornieren?")) {
+        // Stellen Sie sicher, dass terminID eine gültige Zahl ist
+        if (!isNaN(appointmentID)) {
+          fetch(`/loeschetermine/${appointmentID}`, {
+            method: 'DELETE'
+          })
+            .then(response => {
+              if (response.ok) {
+                // Erfolgreich gelöscht, entferne das entsprechende TableRow
+                const tr = document.getElementById(`appointment-${appointmentID}`);
+                if (tr) {
+                  tr.remove();
+                } else {
+                  console.error('TableRow nicht gefunden für TerminID:', appointmentID);
+                }
+              } else {
+                alert("Fehler beim Löschen des Termins.");
+              }
+            })
+            .catch(error => {
+              console.error('Fehler beim Löschen des Termins:', error);
+              alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
+            });
+        } else {
+          console.error('Ungültige TerminID:', appointmentID);
         }
-    });
-}
+      }
+    }
+ */
+
 
 
 
@@ -400,9 +392,11 @@ function speichereNeuenTermin() {
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-  <script src="js/main.js"></script>  
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+  <script src="js/main.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 
 </body>
 

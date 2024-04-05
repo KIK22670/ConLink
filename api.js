@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const client = require('./connection.js');
 const bcrypt = require('bcrypt');
+const Sequelize = require('sequelize');
+
 
 // Middleware, um die Verbindung zu öffnen
 //router.use((req, res, next) => {

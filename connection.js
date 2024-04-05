@@ -1,4 +1,6 @@
 const { Client } = require('pg');
+const Sequelize = require('sequelize');
+
 
 let client;
 
