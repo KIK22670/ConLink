@@ -280,6 +280,28 @@
     </div>
   </div>
 
+  <!-- Modal für die Stornierungsbestätigung -->
+  <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationModalLabel">Stornierung bestätigen</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Sind Sie sicher, dass Sie diesen Termin stornieren möchten?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+          <button type="button" class="btn btn-danger" id="confirmCancel">Stornieren</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
 
@@ -291,6 +313,17 @@
     function format_date(date) {
       return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
     }
+
+    // JavaScript-Funktion zum Öffnen des Stornierungs-Modals
+    function confirmCancellation(appointmentID) {
+      $('#confirmationModal').modal('show'); // Modal öffnen
+      // Event-Listener für die Stornierungsbestätigung
+      $('#confirmCancel').click(function () {
+        storniereTermin(appointmentID); // Funktion zum Stornieren des Termins aufrufen
+        $('#confirmationModal').modal('hide'); // Modal schließen
+      });
+    }
+
 
     function holeTermine(dateFrom, dateTo) {
       if (!dateTo) dateTo = new Date("3000-01-01");
@@ -317,38 +350,77 @@
         });
     }
 
-
     function storniereTermin(appointmentID) {
-      // Bestätigungsdialog anzeigen
-      if (confirm("Möchten Sie diesen Termin wirklich stornieren?")) {
-        // AJAX-Anfrage zum Stornieren des Termins
-        $.ajax({
-          url: '/storniereTermin',
-          method: 'POST',
-          contentType: 'application/json',
-          data: JSON.stringify({ appointmentID: appointmentID }),
-          success: function (response) {
-            // Überprüfen Sie die Antwort des Servers
-            if (response.message === 'Termin wurde erfolgreich storniert') {
-              // Wenn der Termin erfolgreich storniert wurde, entfernen Sie die gesamte Zeile aus der Tabelle
-              const row = document.getElementById(`appointment-${appointmentID}`).closest('tr');
-              if (row) {
-                // Die Zeile entfernen
-                row.parentNode.removeChild(row);
-                console.log('Termin erfolgreich storniert');
+      // Funktion zur Anzeige des Modal zur Stornierungsbestätigung
+      function confirmCancellation() {
+        $('#confirmationModal').modal('show'); // Modal öffnen
+        // Event-Listener für die Stornierungsbestätigung
+        $('#confirmCancel').click(function () {
+          // AJAX-Anfrage zum Stornieren des Termins
+          $.ajax({
+            url: '/storniereTermin',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ appointmentID: appointmentID }),
+            success: function (response) {
+              // Überprüfen Sie die Antwort des Servers
+              if (response.message === 'Termin wurde erfolgreich storniert') {
+                // Wenn der Termin erfolgreich storniert wurde, entfernen Sie die gesamte Zeile aus der Tabelle
+                const row = document.getElementById(`appointment-${appointmentID}`).closest('tr');
+                if (row) {
+                  // Die Zeile entfernen
+                  row.parentNode.removeChild(row);
+                  console.log('Termin erfolgreich storniert');
+                } else {
+                  console.error('Fehler: Terminzeile nicht gefunden');
+                }
               } else {
-                console.error('Fehler: Terminzeile nicht gefunden');
+                console.error('Fehler beim Stornieren des Termins:', response.error);
               }
-            } else {
-              console.error('Fehler beim Stornieren des Termins:', response.error);
+            },
+            error: function (error) {
+              console.error('Fehler beim Stornieren des Termins:', error);
             }
-          },
-          error: function (error) {
-            console.error('Fehler beim Stornieren des Termins:', error);
-          }
+          });
+          $('#confirmationModal').modal('hide'); // Modal schließen
         });
       }
+
+      // Bestätigungsdialog anzeigen
+      confirmCancellation(); // Funktion zur Anzeige des Modal zur Stornierungsbestätigung aufrufen
     }
+
+    /*  function storniereTermin(appointmentID) {
+       // Bestätigungsdialog anzeigen
+       if (confirm("Möchten Sie diesen Termin wirklich stornieren?")) {
+         // AJAX-Anfrage zum Stornieren des Termins
+         $.ajax({
+           url: '/storniereTermin',
+           method: 'POST',
+           contentType: 'application/json',
+           data: JSON.stringify({ appointmentID: appointmentID }),
+           success: function (response) {
+             // Überprüfen Sie die Antwort des Servers
+             if (response.message === 'Termin wurde erfolgreich storniert') {
+               // Wenn der Termin erfolgreich storniert wurde, entfernen Sie die gesamte Zeile aus der Tabelle
+               const row = document.getElementById(`appointment-${appointmentID}`).closest('tr');
+               if (row) {
+                 // Die Zeile entfernen
+                 row.parentNode.removeChild(row);
+                 console.log('Termin erfolgreich storniert');
+               } else {
+                 console.error('Fehler: Terminzeile nicht gefunden');
+               }
+             } else {
+               console.error('Fehler beim Stornieren des Termins:', response.error);
+             }
+           },
+           error: function (error) {
+             console.error('Fehler beim Stornieren des Termins:', error);
+           }
+         });
+       }
+     } */
 
 
 
