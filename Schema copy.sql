@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS p_patienten (
 -- Tabelle `t_termine` erstellen
 CREATE TABLE IF NOT EXISTS t_termine (
   t_id SERIAL PRIMARY KEY,
-  t_datum DATE,
-  t_uhrzeit TIME,
+  t_datum TIMESTAMP,
+  --t_uhrzeit TIME,
   t_termintyp VARCHAR(45),
   t_p_id INT REFERENCES p_patienten(p_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   t_a_id INT REFERENCES a_aerzte(a_id) ON DELETE NO ACTION ON UPDATE NO ACTION,

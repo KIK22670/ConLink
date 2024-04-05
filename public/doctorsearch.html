@@ -335,6 +335,43 @@
             right: 0.75rem;
             transform: translateY(-50%);
         }
+
+        .popup {
+            display: none;
+            /* standardmäßig ausblenden */
+            position: fixed;
+            z-index: 9999;
+            /* hohe Z-Index-Zahl, um über anderen Inhalten zu liegen */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            /* halbtransparenter Hintergrund */
+        }
+
+        .popup-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -558,27 +595,30 @@
             });
         });
 
-        /*function speichern() {
-            fetch('/speichern', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ selectedDate }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Daten erfolgreich gespeichert:', data);
-                })
-                .catch(error => {
-                    console.error('Fehler beim Speichern der Daten:', error);
-                });
-        }
-        */
     </script>
+
+    <!-- Hier fügen wir den Modal-Code für das Popup ein -->
+    <div class="modal fade" id="successBuchungModal" tabindex="-1" role="dialog"
+        aria-labelledby="successBuchungModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successBuchungModalLabel">Termin erfolgreich gebucht</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Ihr Termin wurde erfolgreich gebucht.
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script>
+
+
         function toggleBewertungen(profileNumber) {
             var bewertungenContainer = document.getElementById('bewertungenContainer-' + profileNumber);
             bewertungenContainer.style.display = (bewertungenContainer.style.display === 'none') ? 'block' : 'none';
@@ -737,6 +777,21 @@
             });
         }
 
+        function showPopup(message) {
+            // Erstellen Sie das Pop-up-Element
+            const popup = document.createElement('div');
+            popup.classList.add('popup');
+            popup.textContent = message;
+
+            // Fügen Sie das Pop-up-Element dem Dokument hinzu
+            document.body.appendChild(popup);
+
+            // Schließen Sie das Pop-up nach einer kurzen Verzögerung
+            setTimeout(() => {
+                popup.remove();
+            }, 3000); // 3000 Millisekunden = 3 Sekunden
+        }
+
 
 
         function buchungSpeichern(doctorId) {
@@ -744,12 +799,7 @@
             // Ausgewähltes Datum und Arzt-ID abrufen
             const selectedDate = $(`#datePicker-${doctorId}`).val();
             const selectedDateSplitted = selectedDate.match(/(\d+)-(\d+)-(\d+) (\d+):(\d+)/);
-            //console.log(selectedDateSplitted);
-
             const appointmentType = document.querySelector(`#appointmentType-${doctorId}`).value;
-
-            // const kategorie = document.querySelector(`#container-box-${doctorId} .lt_richtung`).innerText.trim();
-
 
             // Fachrichtung des Arztes abrufen
             const fachrichtung = document.querySelector(`#container-box-${doctorId} .lt_richtung`).innerText.trim();
@@ -758,9 +808,8 @@
             const kategorie = `${appointmentType} beim ${fachrichtung} `;
             //selectedDate: `${selectedDateSplitted[3]}-${selectedDateSplitted[2]}-${selectedDateSplitted[1]}T${selectedDateSplitted[4]}:${selectedDateSplitted[5]}:00`
 
-            // AJAX-Anfrage zum Speichern der Buchung
             $.ajax({
-                url: '/speichereTermin',  // Hier sollte die URL des Servers stehen, der die Datenbankanfrage verarbeitet
+                url: '/speichereTermin',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -769,14 +818,12 @@
                     kategorie: kategorie
                 }),
                 success: function (response) {
-                    kategorie = null;
                     console.log('Buchung erfolgreich gespeichert:', response);
-                    // Fügen Sie hier weitere Aktionen nach erfolgreicher Speicherung hinzu
-
+                    $('#successBuchungModal').modal('show'); // Popup für erfolgreiche Buchung anzeigen
                 },
                 error: function (error) {
                     console.error('Fehler beim Speichern der Buchung:', error);
-                    // Fügen Sie hier Aktionen für den Fall eines Fehlers hinzu
+                    // Hier kann bei einem Fehler eine entsprechende Aktion ausgeführt werden
                 }
             });
         }

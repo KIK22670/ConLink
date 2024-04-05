@@ -311,7 +311,7 @@
     });
 
     function format_date(date) {
-      return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+      return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
     }
 
     // JavaScript-Funktion zum Öffnen des Stornierungs-Modals
@@ -338,9 +338,10 @@
 
           appointments.filter(a => new Date(a.appointmentDate) <= dateTo && new Date(a.appointmentDate) >= dateFrom).forEach((appointment) => {
             const tr = document.createElement("tr");
+
             tr.innerHTML = `
               <td>${appointment.appointmentID}</td>
-             <td>${new Date(appointment.appointmentDate).toLocaleString()}</td>
+              <td>${formatiereDatum(new Date(appointment.appointmentDate))}</td>
              <td>${appointment.appointmentTyp}</td>
              <td><button class="btn btn-warning btn-sm" onclick="bearbeiteTermin(${appointment.id})"><i class="bi bi-pencil"></i></button></td>
              <td><button id="appointment-${appointment.appointmentID}" class="btn btn-danger btn-sm" onclick="storniereTermin(${appointment.appointmentID})"><i class="bi bi-x-circle"></i></button></td>
@@ -349,6 +350,25 @@
           });
         });
     }
+
+    // <td>${new Date(appointment.appointmentDate).toLocaleString()}</td>
+
+    function formatiereDatum(date) {
+      // Ein Tag zum Datum hinzufügen
+      const newDate = new Date(date);
+      newDate.setHours(newDate.getHours() + 2); // Zwei Stunden hinzufügen
+
+      // Datum formatieren
+      const tag = newDate.getDate().toString().padStart(2, '0');
+      const monat = (newDate.getMonth() + 1).toString().padStart(2, '0');
+      const jahr = newDate.getFullYear();
+      const stunden = newDate.getHours().toString().padStart(2, '0');
+      const minuten = newDate.getMinutes().toString().padStart(2, '0');
+
+      return `${tag}.${monat}.${jahr} ${stunden}:${minuten}`;
+    }
+
+
 
     function storniereTermin(appointmentID) {
       // Funktion zur Anzeige des Modal zur Stornierungsbestätigung
