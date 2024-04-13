@@ -36,8 +36,51 @@ app.get('/registration', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'registration.html'));
 });
 
-
 app.post('/registration', async (req, res) => {
+    const { emailregister, passwortregister } = req.body;
+
+    try {
+        // Check if the email is already registered
+        const checkEmailQuery = {
+            text: 'SELECT * FROM u_userverwaltung WHERE u_email = $1',
+            values: [emailregister],
+        };
+
+        const emailCheckResult = await client.query(checkEmailQuery);
+
+        if (emailCheckResult.rows.length > 0) {
+            // Email is already registered
+            return res.status(400).json({ error: 'Email already exists' });
+        }
+
+        // Check if the password meets requirements
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(passwortregister)) {
+            // Password does not meet requirements
+            return res.status(400).json({ error: 'Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long' });
+        }
+
+        // If email is not registered and password meets requirements, proceed with registration
+        const hashedPassword = await bcrypt.hash(passwortregister, 10);
+
+        const insertUserQuery = {
+            text: 'INSERT INTO u_userverwaltung(u_email, u_passwort) VALUES($1, $2) RETURNING *',
+            values: [emailregister, hashedPassword],
+        };
+
+        const result = await client.query(insertUserQuery);
+
+        console.log(result);
+        res.status(201).json({ message: 'User registered successfully, now try to login' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
+/* app.post('/registration', async (req, res) => {
     const { emailregister, passwortregister } = req.body;
 
     try {
@@ -57,21 +100,12 @@ app.post('/registration', async (req, res) => {
         // If email is not registered, proceed with registration
         const hashedPassword = await bcrypt.hash(passwortregister, 10);
 
-        const token = crypto.randomBytes(20).toString('hex');
-
         const insertUserQuery = {
-            text: 'INSERT INTO u_userverwaltung(u_email, u_passwort, verification_token) VALUES($1, $2, $3) RETURNING *',
-            values: [emailregister, hashedPassword, token],
+            text: 'INSERT INTO u_userverwaltung(u_email, u_passwort) VALUES($1, $2) RETURNING *',
+            values: [emailregister, hashedPassword],
         };
 
-
-
         const result = await client.query(insertUserQuery);
-
-        console.log("=================");
-
-
-
         console.log(result);
         res.status(201).json({ message: 'User registered successfully, now try to login' });
     } catch (error) {
@@ -79,6 +113,7 @@ app.post('/registration', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+ */
 
 app.get('/verify/:token', async (req, res) => {
     const token = req.params.token;

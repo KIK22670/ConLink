@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,19 +8,47 @@
 
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css" />
-
-    <link href="img/favicon.ico" rel="icon">
-
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link href="css/stylehome.css" rel="stylesheet">
     <link rel="stylesheet" href="css/stylelogin.css">
     <link rel="stylesheet" href="css/stylehome.css">
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="/node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <style>
+        .password-strength-indicator {
+            margin-top: 5px;
+            font-size: 12px;
+            height: 5px;
+            border-radius: 2px;
+            background-color: transparent;
+            overflow: hidden;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .password-strength-weak {
+            background-color: #ff6347;
+            /* Rot für schwach */
+            width: 33.33%;
+        }
+
+        .password-strength-normal {
+            background-color: #ffd700;
+            /* Gelb für normal */
+            width: 66.66%;
+        }
+
+        .password-strength-strong {
+            background-color: #32cd32;
+            /* Grün für stark */
+            width: 100%;
+        }
+
+        .password-match-indicator {
+            font-size: 12px;
+            color: #6c757d;
+        }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
@@ -49,13 +77,55 @@
                 try {
                     const response = await axios.post('/registration', formDataObject);
                     console.log(response.data);
-                    window.location.href= "/login";
+                    window.location.href = "/login";
                 } catch (error) {
                     console.error(error);
                     alert('Fehler bei der Registrierung: ' + error.message);
                 }
             });
+
+            const passwordInput = document.getElementById('password-input');
+            const passwordStrengthIndicator = document.getElementById('password-strength-indicator');
+            const confirmPasswordInput = document.getElementById('confirm-password-input');
+            const passwordMatchIndicator = document.getElementById('password-match-indicator');
+
+            passwordInput.addEventListener('input', function () {
+                const password = passwordInput.value;
+                const passwordStrengthClass = getPasswordStrengthClass(password);
+                const strengthText = passwordStrengthClass.charAt(0).toUpperCase() + passwordStrengthClass.slice(1);
+                passwordStrengthIndicator.textContent = 'Password Strength: ' + strengthText;
+                passwordStrengthIndicator.className = 'password-strength-indicator password-strength-' + passwordStrengthClass;
+            });
+
+            confirmPasswordInput.addEventListener('input', function () {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                if (password === confirmPassword) {
+                    passwordMatchIndicator.textContent = 'Passwörter stimmen überein';
+                    passwordMatchIndicator.style.color = '#28a745';
+                } else {
+                    passwordMatchIndicator.textContent = 'Passwörter stimmen nicht überein';
+                    passwordMatchIndicator.style.color = '#dc3545';
+                }
+            });
         });
+
+        function getPasswordStrengthClass(password) {
+            const weakRegex = /^(?=.*[a-zA-Z]).{1,}$/;
+            const normalRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+            const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+            if (strongRegex.test(password)) {
+                return 'strong';
+            } else if (normalRegex.test(password)) {
+                return 'normal';
+            } else if (weakRegex.test(password)) {
+                return 'weak';
+            } else {
+                return '';
+            }
+        }
     </script>
 
 </head>
@@ -114,14 +184,19 @@
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="label" for="password">Passwort</label>
-                                    <input type="password" class="form-control" name="passwortregister" placeholder="Password" required>
+                                    <input type="password" class="form-control" name="passwortregister"
+                                        id="password-input" placeholder="Password" required>
+                                    <div id="password-strength-indicator" class="password-strength-indicator"></div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="label" for="password_confirm">Passwort bestätigen</label>
-                                    <input type="password" class="form-control" name="passwort_confirm" placeholder="Confirm Password" required>
+                                    <input type="password" class="form-control" name="passwort_confirm"
+                                        id="confirm-password-input" placeholder="Confirm Password" required>
+                                    <div id="password-match-indicator" class="password-match-indicator"></div>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <button type="submit" value="Registration" class="form-control btn btn-primary submit px-3">Sign Up</button>
+                                    <button type="submit" value="Registration"
+                                        class="form-control btn btn-primary submit px-3">Sign Up</button>
                                 </div>
                             </form>
                         </div>
@@ -130,10 +205,10 @@
             </div>
         </div>
     </section>
-    
+
     <!--Fehlermeldung die kommt, wenn Passwörter nicht übereinstimmen -->
-    
-    
+
+
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light border-top border-secondary py-4">
         <div class="container">
@@ -152,11 +227,6 @@
     <!-- Footer End -->
 
     <!-- jQuery einbinden -->
-
-
-
-
-
 </body>
 
 </html>
