@@ -339,11 +339,13 @@
           appointments.filter(a => new Date(a.appointmentDate) <= dateTo && new Date(a.appointmentDate) >= dateFrom).forEach((appointment) => {
             const tr = document.createElement("tr");
 
+            const note = appointment.appointmentNote !== undefined ? appointment.appointmentNote : '';
+
             tr.innerHTML = `
               <td>${appointment.appointmentID}</td>
               <td>${formatiereDatum(new Date(appointment.appointmentDate))}</td>
              <td>${appointment.appointmentTyp}</td>
-             <td><button class="btn btn-warning btn-sm" onclick="bearbeiteTermin(${appointment.id})"><i class="bi bi-pencil"></i></button></td>
+              <td>${note}</td> <!-- Display appointment note or empty string -->
              <td><button id="appointment-${appointment.appointmentID}" class="btn btn-danger btn-sm" onclick="storniereTermin(${appointment.appointmentID})"><i class="bi bi-x-circle"></i></button></td>
               `;
             table.appendChild(tr);

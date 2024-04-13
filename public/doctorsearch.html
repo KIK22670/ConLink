@@ -372,6 +372,162 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            resize: vertical;
+            /* Erlaubt das vertikale Ändern der Größe */
+            min-height: 100px;
+            /* Mindesthöhe */
+            max-height: 200px;
+            /* Maximale Höhe */
+            font-size: 16px;
+            /* Schriftgröße */
+            line-height: 1.5;
+            /* Zeilenhöhe */
+            font-family: 'Lato', sans-serif;
+            /* Schriftfamilie */
+        }
+
+        textarea:focus {
+            outline: none;
+            /* Entfernt den Fokus-Rahmen */
+            border-color: #80bdff;
+            /* Ändert die Randfarbe bei Fokus */
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            /* Fügt einen Schatten hinzu, wenn im Fokus */
+        }
+
+        #datePicker-1 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+
+        #datePicker-1:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        #datePicker-2 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+
+        #datePicker-2:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        #datePicker-3 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+
+        #datePicker-3:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        #datePicker-4 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+
+        #datePicker-4:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        #datePicker-5 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+
+        #datePicker-5:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        #datePicker-6 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+
+        #datePicker-6:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        #datePicker-7 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+
+        #datePicker-7:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        #datePicker-8 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+
+        #datePicker-8:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
     </style>
 </head>
 
@@ -462,7 +618,13 @@
                     <h3>Facharzt für <span class="lt_richtung">Allgemeinmedizin</span></h3>
                 </div>
             </div>
-            <p class="lt_plz"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>1050 Wien</p>
+            <p class="lt_plz">
+                <span class="icon" style="color: inherit;"><i class="fas fa-map-marker-alt"></i></span>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Kolingasse+15+1,+1090+Wien"
+                    target="_blank">Kolingasse
+                    15/1, 1090 Wien</a>
+            </p>
+
             <p><a href="tel:018374623"><span class="icon"><i class="fas fa-phone"></i></span>01 8374623</a></p>
             <p><a href="tel:+4367712863712"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 677
                     12863712</a></p>
@@ -541,13 +703,17 @@
             <h3>Wählen Sie einen Termin aus</h3>
             <input type="text" id="datePicker-1" placeholder="Datum und Uhrzeit auswählen">
             <p></p>
+            <h3>Notiz für den Arzt</h3>
+            <textarea id="notiz-1" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
+            <p></p>
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-1" class="custom-select">
                 <option value="Erstuntersuchung">Erstuntersuchung</option>
                 <option value="Folgeuntersuchung">Folgeuntersuchung</option>
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
-            <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
+            <p>
+                <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
 
 
             <div class="button-container">
@@ -799,6 +965,7 @@
             const selectedDate = $(`#datePicker-${doctorId}`).val();
             const selectedDateSplitted = selectedDate.match(/(\d+)-(\d+)-(\d+) (\d+):(\d+)/);
             const appointmentType = document.querySelector(`#appointmentType-${doctorId}`).value;
+            const notiz = document.querySelector(`#notiz-${doctorId}`).value; // Notiz abrufen
 
             // Fachrichtung des Arztes abrufen
             const fachrichtung = document.querySelector(`#container-box-${doctorId} .lt_richtung`).innerText.trim();
@@ -814,7 +981,8 @@
                 data: JSON.stringify({
                     doctorId: doctorId,
                     selectedDate: `${selectedDateSplitted[3]}-${selectedDateSplitted[2]}-${selectedDateSplitted[1]}T${selectedDateSplitted[4]}:${selectedDateSplitted[5]}:00`,
-                    kategorie: kategorie
+                    kategorie: kategorie,
+                    notiz: notiz // Notiz als Teil der Daten senden
                 }),
                 success: function (response) {
                     console.log('Buchung erfolgreich gespeichert:', response);
@@ -840,7 +1008,14 @@
                     <h3>Fachärztin für <span class="lt_richtung">Kardiologie</span></h3>
                 </div>
             </div>
-            <p class="lt_plz"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>1100 Wien</p>
+            <p class="lt_plz">
+                <span class="icon">
+                    <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
+                </span>
+                <a href="https://www.google.com/maps/search/?api=1&query=Fichtegasse+5%2F8%2C+1010+Wien"
+                    target="_blank">Fichtegasse
+                    5/8, 1010 Wien</a>
+            </p>
             <p><a href="tel:016743561"><span class="icon"><i class="fas fa-phone"></i></span>01 6743561</a></p>
             <p><a href="tel:+4360045327698"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 600
                     45327698</a></p>
@@ -923,12 +1098,16 @@
             <!-- Hier könnte weiterer Text oder HTML für den Kalender stehen -->
             <input type="text" id="datePicker-2" placeholder="Datum und Uhrzeit auswählen">
             <p></p>
+            <h3>Notiz für den Arzt</h3>
+            <textarea id="notiz-2" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
+            <p></p>
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-2" class="custom-select">
                 <option value="Erstuntersuchung">Erstuntersuchung</option>
                 <option value="Folgeuntersuchung">Folgeuntersuchung</option>
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
+            <p></p>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
 
             <div class="button-container">
@@ -986,7 +1165,14 @@
                     <h3>Facharzt für <span class="lt_richtung">Dermatologie</span></h3>
                 </div>
             </div>
-            <p class="lt_plz"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>1120 Wien</p>
+            <p>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Währinger+Straße+39%2C+1090+Wien"
+                    target="_blank">
+                    <span class="icon"><i class="fas fa-map-marker-alt" style="color: #007bff;"></i></span>
+                    Währinger Straße 39, 1090 Wien
+                </a>
+            </p>
+
             <p><a href="tel:019371263"><span class="icon"><i class="fas fa-phone"></i></span>01 9371263</a></p>
             <p><a href="tel:+4369949271263"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 699
                     49271263</a></p>
@@ -1068,12 +1254,16 @@
             <!-- Hier könnte weiterer Text oder HTML für den Kalender stehen -->
             <input type="text" id="datePicker-3" placeholder="Datum und Uhrzeit auswählen">
             <p></p>
+            <h3>Notiz für den Arzt</h3>
+            <textarea id="notiz-3" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
+            <p></p>
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-3" class="custom-select">
                 <option value="Erstuntersuchung">Erstuntersuchung</option>
                 <option value="Folgeuntersuchung">Folgeuntersuchung</option>
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
+            <p></p>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
 
             <div class="button-container">
@@ -1130,7 +1320,13 @@
                     <h3>Fachärztin für <span class="lt_richtung">Pädiatrie</span></h3>
                 </div>
             </div>
-            <p class="lt_plz"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>1010 Wien</p>
+            <p class="lt_plz">
+                <span class="icon">
+                    <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
+                </span>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Trattnerhof+2%2F106-108%2C+1010+Wien"
+                    target="_blank">Trattnerhof 2/106-108, 1010 Wien</a>
+            </p>
             <p><a href="tel:014820374"><span class="icon"><i class="fas fa-phone"></i></span>01 4820374</a></p>
             <p><a href="tel:+4369998362817"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 699
                     98362817</a></p>
@@ -1213,6 +1409,9 @@
             <!-- Hier könnte weiterer Text oder HTML für den Kalender stehen -->
             <input type="text" id="datePicker-4" placeholder="Datum und Uhrzeit auswählen">
             <p></p>
+            <h3>Notiz für den Arzt</h3>
+            <textarea id="notiz-4" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
+            <p></p>
 
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-4" class="custom-select">
@@ -1221,6 +1420,7 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
+            <p></p>
 
             <div class="button-container">
                 <button onclick="buchungSpeichern(4)">Termin buchen</button>
@@ -1276,7 +1476,13 @@
                     <h3>Facharzt für <span class="lt_richtung">Onkologie</span></h3>
                 </div>
             </div>
-            <p class="lt_plz"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>1020 Wien</p>
+            <p class="lt_plz">
+                <span class="icon">
+                    <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
+                </span>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Ausstellungsstra%C3%9Fe+7%2F4%2C+Wien"
+                    target="_blank">Ausstellungsstraße 7/4, Wien</a>
+            </p>
             <p><a href="tel:019012834"><span class="icon"><i class="fas fa-phone"></i></span>01 9012834</a></p>
             <p><a href="tel:+4367409271635"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 674
                     09271635</a></p>
@@ -1360,6 +1566,9 @@
             <!-- Hier könnte weiterer Text oder HTML für den Kalender stehen -->
             <input type="text" id="datePicker-5" placeholder="Datum und Uhrzeit auswählen">
             <p></p>
+            <h3>Notiz für den Arzt</h3>
+            <textarea id="notiz-5" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
+            <p></p>
 
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-5" class="custom-select">
@@ -1368,6 +1577,7 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
+            <p></p>
 
             <div class="button-container">
                 <button onclick="buchungSpeichern(5)">Termin buchen</button>
@@ -1424,7 +1634,14 @@
                     <h3>Fachärztin für <span class="lt_richtung">Psychologie</span></h3>
                 </div>
             </div>
-            <p class="lt_plz"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>1030 Wien</p>
+            <p>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Weihburggasse+22%2F1%2C+1010+Wien"
+                    target="_blank">
+                    <span class="icon"><i class="fas fa-map-marker-alt" style="color: #007bff;"></i></span>
+                    Weihburggasse 22/1, 1010 Wien
+                </a>
+            </p>
+
             <p><a href="tel:019381726"><span class="icon"><i class="fas fa-phone"></i></span>01 9381726</a></p>
             <p><a href="tel:+4367409273649"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 674
                     09273649</a></p>
@@ -1514,6 +1731,9 @@
             <!-- Hier könnte weiterer Text oder HTML für den Kalender stehen -->
             <input type="text" id="datePicker-6" placeholder="Datum und Uhrzeit auswählen">
             <p></p>
+            <h3>Notiz für den Arzt</h3>
+            <textarea id="notiz-6" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
+            <p></p>
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-6" class="custom-select">
                 <option value="Erstuntersuchung">Erstuntersuchung</option>
@@ -1521,7 +1741,7 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
-
+            <p></p>
             <div class="button-container">
                 <button onclick="buchungSpeichern(6)">Termin buchen</button>
             </div>
@@ -1577,7 +1797,14 @@
                     <h3>Facharzt für <span class="lt_richtung">Orthopädie</span></h3>
                 </div>
             </div>
-            <p class="lt_plz"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>1040 Wien</p>
+            <p>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Neuwaldegger+Stra%C3%9Fe+2%2C+1170+Wien"
+                    target="_blank">
+                    <span class="icon"><i class="fas fa-map-marker-alt" style="color: #007bff;"></i></span>
+                    Neuwaldegger Straße 2, 1170 Wien
+                </a>
+            </p>
+
             <p><a href="tel:018123934"><span class="icon"><i class="fas fa-phone"></i></span>01 8123934</a></p>
             <p><a href="tel:+4366002711523"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 660
                     02711523</a></p>
@@ -1663,7 +1890,9 @@
             <!-- Hier könnte weiterer Text oder HTML für den Kalender stehen -->
             <input type="text" id="datePicker-7" placeholder="Datum und Uhrzeit auswählen">
             <p></p>
-
+            <h3>Notiz für den Arzt</h3>
+            <textarea id="notiz-7" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
+            <p></p>
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-7" class="custom-select">
                 <option value="Erstuntersuchung">Erstuntersuchung</option>
@@ -1671,6 +1900,7 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
+            <p></p>
 
             <div class="button-container">
                 <button onclick="buchungSpeichern(7)">Termin buchen</button>
@@ -1726,7 +1956,14 @@
                     <h3>Fachärztin für <span class="lt_richtung">Neurologie</span></h3>
                 </div>
             </div>
-            <p class="lt_plz"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>1060 Wien</p>
+            <p>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Otto-Bauer-Gasse+15%2F8%2C+1060+Wien"
+                    target="_blank">
+                    <span class="icon"><i class="fas fa-map-marker-alt" style="color: #007bff;"></i></span>
+                    Otto-Bauer-Gasse 15/8, 1060 Wien
+                </a>
+            </p>
+
             <p><a href="tel:013821773"><span class="icon"><i class="fas fa-phone"></i></span>01 3821773</a></p>
             <p><a href="tel:+4366501822436"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 665
                     01822436</a></p>
@@ -1812,6 +2049,9 @@
             <!-- Hier könnte weiterer Text oder HTML für den Kalender stehen -->
             <input type="text" id="datePicker-8" placeholder="Datum und Uhrzeit auswählen">
             <p></p>
+            <h3>Notiz für den Arzt</h3>
+            <textarea id="notiz-8" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
+            <p></p>
 
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-8" class="custom-select">
@@ -1820,6 +2060,7 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
+            <p></p>
 
             <div class="button-container">
                 <button onclick="buchungSpeichern(8)">Termin buchen</button>
