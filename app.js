@@ -10,10 +10,18 @@ const crypto = require('crypto');
 const { sequelize, DataTypes } = require('sequelize');
 const bodyParser = require('body-parser');
 const { use } = require('passport');
+const sgMail = require('@sendgrid/mail');
+require('dotenv').config();
+
+
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(bodyParser.json());
+
+
+app.use(bodyParser.json({ limit: '2gb' }));
+
+sgMail.setApiKey(process.env.MY_API_KEY);
 
 
 app.use(morgan('combined'));
@@ -30,6 +38,103 @@ app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 app.use(cors()); // Enable CORS
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'home.html'));
+});
+
+// Template für die Verifizierungs-E-Mail
+const emailVerificationTemplate = (verificationToken) => `
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Mail-Verifizierung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #1b9aaa;
+            color: #fff;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .verification-link a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1b9aaa;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .verification-link a:hover {
+            background-color: #0f7c8a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>E-Mail-Verifizierung Erforderlich</h1>
+            </div>
+            <div class="card-body">
+                <p>Bitte klicken Sie auf den folgenden Link, um Ihre E-Mail-Adresse zu verifizieren:</p>
+                <div class="verification-link">
+                    <a href="http://localhost:3001/verify-email/${verificationToken}">Verify Email</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+`;
+
+app.get('/email-verification', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'emailverification.html'));
 });
 
 app.get('/registration', (req, res) => {
@@ -60,18 +165,29 @@ app.post('/registration', async (req, res) => {
             return res.status(400).json({ error: 'Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long' });
         }
 
+        const verificationToken = crypto.randomBytes(20).toString('hex');
+
         // If email is not registered and password meets requirements, proceed with registration
         const hashedPassword = await bcrypt.hash(passwortregister, 10);
 
         const insertUserQuery = {
-            text: 'INSERT INTO u_userverwaltung(u_email, u_passwort) VALUES($1, $2) RETURNING *',
-            values: [emailregister, hashedPassword],
+            text: 'INSERT INTO u_userverwaltung(u_email, u_passwort, verification_token) VALUES($1, $2, $3) RETURNING *',
+            values: [emailregister, hashedPassword, verificationToken],
         };
 
-        const result = await client.query(insertUserQuery);
+        await client.query(insertUserQuery);
 
-        console.log(result);
-        res.status(201).json({ message: 'User registered successfully, now try to login' });
+        // Send verification email
+        const msg = {
+            to: emailregister,
+            from: 'kikicaleksandra@gmail.com',
+            subject: 'Verify Your Email Address for ConLink',
+            html: emailVerificationTemplate(verificationToken)
+        };
+        await sgMail.send(msg);
+
+        res.redirect('/email-verification');
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: error.message });
@@ -80,43 +196,8 @@ app.post('/registration', async (req, res) => {
 
 
 
-/* app.post('/registration', async (req, res) => {
-    const { emailregister, passwortregister } = req.body;
-
-    try {
-        // Check if the email is already registered
-        const checkEmailQuery = {
-            text: 'SELECT * FROM u_userverwaltung WHERE u_email = $1',
-            values: [emailregister],
-        };
-
-        const emailCheckResult = await client.query(checkEmailQuery);
-
-        if (emailCheckResult.rows.length > 0) {
-            // Email is already registered
-            return res.status(400).json({ error: 'Email already exists' });
-        }
-
-        // If email is not registered, proceed with registration
-        const hashedPassword = await bcrypt.hash(passwortregister, 10);
-
-        const insertUserQuery = {
-            text: 'INSERT INTO u_userverwaltung(u_email, u_passwort) VALUES($1, $2) RETURNING *',
-            values: [emailregister, hashedPassword],
-        };
-
-        const result = await client.query(insertUserQuery);
-        console.log(result);
-        res.status(201).json({ message: 'User registered successfully, now try to login' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
-    }
-});
- */
-
-app.get('/verify/:token', async (req, res) => {
-    const token = req.params.token;
+app.get('/verify-email/:token', async (req, res) => {
+    const { token } = req.params;
 
     try {
         // Find user by verification token
@@ -125,32 +206,97 @@ app.get('/verify/:token', async (req, res) => {
             values: [token],
         };
 
-        const user = await client.query(findUserQuery);
+        const { rows } = await client.query(findUserQuery);
 
-        if (user.rows.length === 0) {
-            return res.status(404).json({ error: 'Invalid or expired token' });
+        if (rows.length === 0) {
+            // No user found with the provided token
+            return res.status(404).send('Invalid verification token.');
         }
 
-        // Update user to mark as verified
+        const user = rows[0];
+
+        // Update user as verified
         const updateUserQuery = {
             text: 'UPDATE u_userverwaltung SET verified = true WHERE u_id = $1',
-            values: [user.rows[0].u_id],
+            values: [user.u_id], // Achten Sie darauf, das entsprechende Feld für den Primärschlüssel zu verwenden
         };
+
 
         await client.query(updateUserQuery);
 
-        res.status(200).json({ message: 'Email verified successfully' });
+        res.redirect('/login'); // Redirect user to login page after successful verification
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: error.message });
+        res.status(500).send('Internal server error');
     }
 });
+
 
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 app.post('/login', async (req, res) => {
+    try {
+        const { email, passwort } = req.body;
+
+        // Log Request Body
+        console.log('Request Body:', req.body);
+
+        // Check if password is provided
+        if (!passwort) {
+            console.log('Password is required');
+            return res.status(400).json({ error: 'Password is required' });
+        }
+
+        // Database Query
+        const query = {
+            text: 'SELECT * FROM u_userverwaltung WHERE LOWER(u_email) = LOWER($1)',
+            values: [email.toLowerCase()],
+        };
+
+        const result = await client.query(query);
+
+        // Log Database Query Result
+        console.log('Database Query Result:', result.rows);
+
+        if (result.rows.length === 1) {
+            console.log('User found in the database');
+            const user = result.rows[0];
+
+            if (!user.verified) {
+                console.log('User email not verified');
+                return res.status(401).json({ error: 'Please verify your email address before logging in' });
+            }
+
+            if (user.u_passwort) {
+                console.log('User has a hashed password');
+
+                // Check if hashed password is defined
+                if (bcrypt.compareSync(passwort, user.u_passwort)) {
+                    console.log('Password comparison successful');
+                    req.session.user = { id: user.u_id, email: user.u_email };
+                    res.redirect('/doctorsearch');
+                } else {
+                    console.log('Incorrect email or password');
+                    res.status(401).json({ error: 'Invalid email or password' });
+                }
+            } else {
+                console.log('User does not have a hashed password');
+                res.status(401).json({ error: 'Invalid email or password' });
+            }
+        } else {
+            console.log('No user found with the provided email');
+            res.status(401).json({ error: 'Invalid email or password' });
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+/* app.post('/login', async (req, res) => {
     try {
         const { email, passwort } = req.body;
 
@@ -202,7 +348,7 @@ app.post('/login', async (req, res) => {
         console.error('Error during login:', error);
         res.status(500).json({ error: error.message });
     }
-});
+}); */
 
 
 app.get('/logout', (req, res) => {
@@ -302,7 +448,7 @@ app.use('/api', apiRouter);
 app.post('/speichereStammdaten', async (req, res) => {
     try {
         const userID = req.session.user.id;
-        const { vorname, nachname, email, telefonnummer, svnr, allergien, vorerkrankungen, medikamente } = req.body;
+        const { vorname, nachname, email, telefonnummer, svnr, allergien, vorerkrankungen, medikamente, bild } = req.body;
 
         // Überprüfen, ob bereits Patientendaten für diesen Benutzer vorhanden sind
         const checkExistingDataQuery = {
@@ -316,19 +462,19 @@ app.post('/speichereStammdaten', async (req, res) => {
             const updateDataQuery = {
                 text: `UPDATE p_patienten 
                SET p_vorname = $1, p_nachname = $2, p_email = $3, p_telefonnummer = $4, 
-                   p_svnr = $5, p_allergien = $6, p_vorerkrankungen = $7, p_medikamente = $8, p_stammdaten = $9
-               WHERE p_id = $10`,
-                values: [vorname, nachname, email, telefonnummer, svnr, allergien, vorerkrankungen, medikamente, JSON.stringify(req.body), userID],
+                   p_svnr = $5, p_allergien = $6, p_vorerkrankungen = $7, p_medikamente = $8, p_stammdaten = $9, p_bild = $10
+               WHERE p_id = $11`,
+                values: [vorname, nachname, email, telefonnummer, svnr, allergien, vorerkrankungen, medikamente, JSON.stringify(req.body), bild, userID],
             };
             await client.query(updateDataQuery);
         } else {
             // Es gibt keine vorhandenen Patientendaten für diesen Benutzer, daher fügen Sie neue Daten hinzu
             const insertDataQuery = {
                 text: `INSERT INTO p_patienten 
-               (p_id, p_vorname, p_nachname, p_email, p_telefonnummer, p_svnr, p_allergien, p_vorerkrankungen, p_medikamente, p_stammdaten) 
+               (p_id, p_vorname, p_nachname, p_email, p_telefonnummer, p_svnr, p_allergien, p_vorerkrankungen, p_medikamente, p_stammdaten, p_bild) 
                VALUES 
-               ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-                values: [userID, vorname, nachname, email, telefonnummer, svnr, allergien, vorerkrankungen, medikamente, JSON.stringify(req.body)],
+               ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+                values: [userID, vorname, nachname, email, telefonnummer, svnr, allergien, vorerkrankungen, medikamente, JSON.stringify(req.body), bild],
             };
             await client.query(insertDataQuery);
         }

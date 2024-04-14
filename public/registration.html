@@ -77,7 +77,7 @@
                 try {
                     const response = await axios.post('/registration', formDataObject);
                     console.log(response.data);
-                    window.location.href = "/login";
+                    window.location.href = "/email-verification";
                 } catch (error) {
                     console.error(error);
                     alert('Fehler bei der Registrierung: ' + error.message);
@@ -177,10 +177,11 @@
                                     <h3 class="mb-4">Sign Up</h3>
                                 </div>
                             </div>
-                            <form action="/registration" method="post" class="signin-form">
+                            <form action="/registration" method="post" class="signin-form" id="emailForm">
                                 <div class="form-group mb-3">
                                     <label class="label">Email</label>
-                                    <input class="form-control" name="emailregister" placeholder="Email" required>
+                                    <input class="form-control" name="emailregister" id="recipientEmail"
+                                        placeholder="Email" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="label" for="password">Passwort</label>
@@ -195,7 +196,7 @@
                                     <div id="password-match-indicator" class="password-match-indicator"></div>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <button type="submit" value="Registration"
+                                    <button type="submit" value="Registration" id="sendEmailButton"
                                         class="form-control btn btn-primary submit px-3">Sign Up</button>
                                 </div>
                             </form>
@@ -205,6 +206,41 @@
             </div>
         </div>
     </section>
+
+    <div id="verificationMessage" style="display: none;">
+        <p>Bitte überprüfen Sie Ihre E-Mail-Adresse, um Ihren Account zu verifizieren. Eine Verifizierungs-E-Mail wurde
+            an
+            Ihre E-Mail-Adresse gesendet.</p>
+    </div>
+
+    <!-- <script>
+        document.getElementById('emailForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevents the default form submission behavior
+
+            const recipientEmail = document.getElementById('recipientEmail').value;
+
+            fetch('/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    to: recipientEmail,
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Email sent:', data);
+                    alert('Email sent successfully!');
+                });
+
+        });
+    </script> -->
 
     <!--Fehlermeldung die kommt, wenn Passwörter nicht übereinstimmen -->
 

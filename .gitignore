@@ -3,4 +3,5 @@
 **/.vscode
 **/.vs
 package-lock.json
-
+.env
+ignored.env
