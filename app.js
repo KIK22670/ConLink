@@ -13,17 +13,14 @@ const { use } = require('passport');
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config();
 
-
 const app = express();
 const port = process.env.PORT || 3001;
-
-
 
 app.use(bodyParser.json({ limit: '2gb' }));
 
 sgMail.setApiKey(process.env.MY_API_KEY);
 
-
+//kurzer Kommentar
 app.use(morgan('combined'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
