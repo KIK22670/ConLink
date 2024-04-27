@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS p_patienten (
   p_allergien TEXT,
   p_vorerkrankungen TEXT,
   p_medikamente TEXT,
+  p_bild BYTEA,
+  p_stammdaten JSON,
   p_a_behandelnderArzt INT REFERENCES a_aerzte(a_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
  
@@ -40,6 +42,7 @@ CREATE TABLE IF NOT EXISTS t_termine (
   t_datum TIMESTAMP,
   --t_uhrzeit TIME,
   t_termintyp VARCHAR(45),
+  t_notizen TEXT,
   t_p_id INT REFERENCES p_patienten(p_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   t_a_id INT REFERENCES a_aerzte(a_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   t_tt_id INT,
@@ -91,6 +94,9 @@ create TABLE IF NOT EXISTS u_userverwaltung (
   u_email VARCHAR(45),
   u_telefonnummer VARCHAR(20),
   u_rolle VARCHAR(45),
+  verified BOOLEAN,
+  verification_token VARCHAR(255),
+  password_reset_token VARCHAR(255),
   u_p_id INT REFERENCES p_patienten(p_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   u_a_id INT REFERENCES a_aerzte(a_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
@@ -115,21 +121,6 @@ VALUES
 ('Dr. med.', 'Laura', 'Hofmann', 'laura.hofmann@example.com', '481910519', 'Neurologin', '1050', 'Wien', 12, 'Dr. med., Neurologie');
  
 
--- Bewertungen einfügen
-INSERT INTO b_bewertungen (b_punkte, b_kommentar, b_p_id, b_a_id)
-VALUES
-(2, 'Nicht zufrieden mit der Behandlung!', 1, 1),
-(5, 'Kompetenter Arzt, empfehle ich weiter.', 3, 3),
-(3, 'Etwas längere Wartezeit, aber gute Beratung.', 2, 2),
-(4, 'Freundliches Personal und saubere Praxis.', 4, 2),
-(5, 'Schnelle Diagnose, bin sehr zufrieden.', 5, 1);
- 
-
--- Termintyp einfügen
-INSERT INTO tt_termintyp (tt_bezeichnung)
-VALUES
-('Erstuntersuchung'),
-('Folgeuntersuchung');
  
 -- Änderungen an `t_termine`-Tabelle
 ALTER TABLE t_termine
@@ -204,21 +195,3 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION;
  
  
-CREATE TABLE IF NOT EXISTS u_general_users (
-  user_id SERIAL PRIMARY KEY,
-  password VARCHAR(100),
-  email VARCHAR(100)
-  /* Add other necessary fields */
-);
-
-ALTER TABLE p_patienten
-ADD COLUMN IF NOT EXISTS p_stammdaten JSON;
-
-CREATE TABLE IF NOT EXISTS verification_tokens (
-  token_id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES u_general_users(user_id) ON DELETE CASCADE ON UPDATE NO ACTION,
-  token VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-

@@ -118,7 +118,7 @@ const emailVerificationTemplate = (verificationToken) => `
             <div class="card-body">
                 <p>Bitte klicken Sie auf den folgenden Link, um Ihre E-Mail-Adresse zu verifizieren:</p>
                 <div class="verification-link">
-                    <a href="https://conlink-9cd090f32e8a.herokuapp.com/verify-email/${verificationToken}">Verify Email</a>
+                    <a href="http://localhost:3001/verify-email/${verificationToken}">Verify Email</a>
                 </div>
             </div>
         </div>
