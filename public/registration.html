@@ -213,38 +213,6 @@
             Ihre E-Mail-Adresse gesendet.</p>
     </div>
 
-    <!-- <script>
-        document.getElementById('emailForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevents the default form submission behavior
-
-            const recipientEmail = document.getElementById('recipientEmail').value;
-
-            fetch('/send-email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    to: recipientEmail,
-                }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Email sent:', data);
-                    alert('Email sent successfully!');
-                });
-
-        });
-    </script> -->
-
-    <!--Fehlermeldung die kommt, wenn Passwörter nicht übereinstimmen -->
-
-
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light border-top border-secondary py-4">
         <div class="container">
