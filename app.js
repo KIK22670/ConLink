@@ -210,7 +210,7 @@ const resetPasswordTemplate = (token) => `
             <div class="card-body">
                 <p>Bitte klicken Sie auf den folgenden Link, um Ihr Passwort zurückzusetzen</p>
                 <div class="verification-link">
-                    <a href="http://localhost:3001/reset-password/${token}">Verify Email</a>
+                    <a href="https://conlink-9cd090f32e8a.herokuapp.com/reset-password/${token}">Verify Email</a>
                 </div>
             </div>
         </div>
