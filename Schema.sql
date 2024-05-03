@@ -1,8 +1,6 @@
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
  
-select * from p_patienten;
- 
 CREATE TABLE IF NOT EXISTS a_aerzte (
   a_id SERIAL PRIMARY KEY,
   a_titel VARCHAR(20),

@@ -620,11 +620,10 @@
             </div>
             <p class="lt_plz">
                 <span class="icon" style="color: inherit;"><i class="fas fa-map-marker-alt"></i></span>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=Kolingasse+15+1,+1090+Wien"
-                    target="_blank">Kolingasse
-                    15/1, 1090 Wien</a>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Rechte+Wienzeile+147/1,+1050+Wien"
+                    target="_blank">1050
+                    Wien</a>
             </p>
-
             <p><a href="tel:018374623"><span class="icon"><i class="fas fa-phone"></i></span>01 8374623</a></p>
             <p><a href="tel:+4367712863712"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 677
                     12863712</a></p>
@@ -712,8 +711,7 @@
                 <option value="Folgeuntersuchung">Folgeuntersuchung</option>
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
-            <p>
-                <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
+            <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
 
 
             <div class="button-container">
@@ -809,9 +807,9 @@
             const userInfo = document.createElement("div");
             userInfo.classList.add("user-info");
             userInfo.innerHTML = `
-        <i class="fas fa-user user-icon"></i>
-        <p class="username">You</p>
-    `;
+            <i class="fas fa-user user-icon"></i>
+            <p class="username">You</p>
+        `;
             newBewertung.appendChild(userInfo);
 
             // Rating
@@ -903,26 +901,26 @@
 
             doctors.forEach(doctor => {
                 const doctorBox = $(`
-                <div class="container-box" id="container-box-${doctor.a_id}">
-                    <div class="info-side">
-                        <h2>${doctor.a_vorname} ${doctor.a_nachname}</h2>
-                        <h3>${doctor.a_fachrichtung}</h3>
-                        <p><span class="icon"><i class="fas fa-map-marker-alt"></i></span>${doctor.a_plz} ${doctor.a_ort}</p>
-                        <p><span class="icon"><i class="fas fa-phone"></i></span>${doctor.a_telefonnummer}</p>
-                        <p><span class="icon"><i class="fas fa-mobile-alt"></i></span>${doctor.a_mobile}</p>
-                        <p><span class="icon"><i class="fas fa-envelope"></i></span>${doctor.a_email}</p>
-                        <p><span class="icon"><i class="fas fa-globe"></i></span>${doctor.a_website}</p>
-                        <p><span class="icon"><i class="fas fa-comments"></i></span>${doctor.a_sprache}</p>
+                    <div class="container-box" id="container-box-${doctor.a_id}">
+                        <div class="info-side">
+                            <h2>${doctor.a_vorname} ${doctor.a_nachname}</h2>
+                            <h3>${doctor.a_fachrichtung}</h3>
+                            <p><span class="icon"><i class="fas fa-map-marker-alt"></i></span>${doctor.a_plz} ${doctor.a_ort}</p>
+                            <p><span class="icon"><i class="fas fa-phone"></i></span>${doctor.a_telefonnummer}</p>
+                            <p><span class="icon"><i class="fas fa-mobile-alt"></i></span>${doctor.a_mobile}</p>
+                            <p><span class="icon"><i class="fas fa-envelope"></i></span>${doctor.a_email}</p>
+                            <p><span class="icon"><i class="fas fa-globe"></i></span>${doctor.a_website}</p>
+                            <p><span class="icon"><i class="fas fa-comments"></i></span>${doctor.a_sprache}</p>
+                        </div>
+                        <div class="calendar-side">
+                            <h2>Kalender</h2>
+                            <h3>Wählen Sie einen Termin aus</h3>
+                            <input type="text" id="datePicker-${doctor.a_id}" placeholder="Datum und Uhrzeit auswählen">
+                            <p></p>
+                            <button onclick="buchungSpeichern(${doctor.a_id})">Termin buchen</button>
+                        </div>
                     </div>
-                    <div class="calendar-side">
-                        <h2>Kalender</h2>
-                        <h3>Wählen Sie einen Termin aus</h3>
-                        <input type="text" id="datePicker-${doctor.a_id}" placeholder="Datum und Uhrzeit auswählen">
-                        <p></p>
-                        <button onclick="buchungSpeichern(${doctor.a_id})">Termin buchen</button>
-                    </div>
-                </div>
-            `);
+                `);
 
                 doctorResultsDiv.append(doctorBox);
 
@@ -1013,8 +1011,8 @@
                     <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
                 </span>
                 <a href="https://www.google.com/maps/search/?api=1&query=Fichtegasse+5%2F8%2C+1010+Wien"
-                    target="_blank">Fichtegasse
-                    5/8, 1010 Wien</a>
+                    target="_blank">1100
+                    Wien</a>
             </p>
             <p><a href="tel:016743561"><span class="icon"><i class="fas fa-phone"></i></span>01 6743561</a></p>
             <p><a href="tel:+4360045327698"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 600
@@ -1107,7 +1105,6 @@
                 <option value="Folgeuntersuchung">Folgeuntersuchung</option>
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
-            <p></p>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
 
             <div class="button-container">
@@ -1165,14 +1162,14 @@
                     <h3>Facharzt für <span class="lt_richtung">Dermatologie</span></h3>
                 </div>
             </div>
-            <p>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=Währinger+Straße+39%2C+1090+Wien"
-                    target="_blank">
-                    <span class="icon"><i class="fas fa-map-marker-alt" style="color: #007bff;"></i></span>
-                    Währinger Straße 39, 1090 Wien
-                </a>
+            <p class="lt_plz">
+                <span class="icon">
+                    <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
+                </span>
+                <a href="https://www.google.com/maps/search/?api=1&query=Fichtegasse+5%2F8%2C+1010+Wien"
+                    target="_blank">1120
+                    Wien</a>
             </p>
-
             <p><a href="tel:019371263"><span class="icon"><i class="fas fa-phone"></i></span>01 9371263</a></p>
             <p><a href="tel:+4369949271263"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 699
                     49271263</a></p>
@@ -1263,7 +1260,6 @@
                 <option value="Folgeuntersuchung">Folgeuntersuchung</option>
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
-            <p></p>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
 
             <div class="button-container">
@@ -1325,7 +1321,7 @@
                     <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
                 </span>
                 <a href="https://www.google.com/maps/dir/?api=1&destination=Trattnerhof+2%2F106-108%2C+1010+Wien"
-                    target="_blank">Trattnerhof 2/106-108, 1010 Wien</a>
+                    target="_blank">1010 Wien</a>
             </p>
             <p><a href="tel:014820374"><span class="icon"><i class="fas fa-phone"></i></span>01 4820374</a></p>
             <p><a href="tel:+4369998362817"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 699
@@ -1412,7 +1408,6 @@
             <h3>Notiz für den Arzt</h3>
             <textarea id="notiz-4" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
             <p></p>
-
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-4" class="custom-select">
                 <option value="Erstuntersuchung">Erstuntersuchung</option>
@@ -1420,7 +1415,6 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
-            <p></p>
 
             <div class="button-container">
                 <button onclick="buchungSpeichern(4)">Termin buchen</button>
@@ -1481,7 +1475,7 @@
                     <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
                 </span>
                 <a href="https://www.google.com/maps/dir/?api=1&destination=Ausstellungsstra%C3%9Fe+7%2F4%2C+Wien"
-                    target="_blank">Ausstellungsstraße 7/4, Wien</a>
+                    target="_blank">1020 Wien</a>
             </p>
             <p><a href="tel:019012834"><span class="icon"><i class="fas fa-phone"></i></span>01 9012834</a></p>
             <p><a href="tel:+4367409271635"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 674
@@ -1569,7 +1563,6 @@
             <h3>Notiz für den Arzt</h3>
             <textarea id="notiz-5" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
             <p></p>
-
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-5" class="custom-select">
                 <option value="Erstuntersuchung">Erstuntersuchung</option>
@@ -1577,7 +1570,6 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
-            <p></p>
 
             <div class="button-container">
                 <button onclick="buchungSpeichern(5)">Termin buchen</button>
@@ -1634,14 +1626,13 @@
                     <h3>Fachärztin für <span class="lt_richtung">Psychologie</span></h3>
                 </div>
             </div>
-            <p>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=Weihburggasse+22%2F1%2C+1010+Wien"
-                    target="_blank">
-                    <span class="icon"><i class="fas fa-map-marker-alt" style="color: #007bff;"></i></span>
-                    Weihburggasse 22/1, 1010 Wien
-                </a>
+            <p class="lt_plz">
+                <span class="icon">
+                    <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
+                </span>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Ausstellungsstra%C3%9Fe+7%2F4%2C+Wien"
+                    target="_blank">1030 Wien</a>
             </p>
-
             <p><a href="tel:019381726"><span class="icon"><i class="fas fa-phone"></i></span>01 9381726</a></p>
             <p><a href="tel:+4367409273649"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 674
                     09273649</a></p>
@@ -1741,7 +1732,7 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
-            <p></p>
+
             <div class="button-container">
                 <button onclick="buchungSpeichern(6)">Termin buchen</button>
             </div>
@@ -1784,7 +1775,6 @@
         });
     </script>
 
-    <!-- arzt nr 7 -->
 
     <!-- Arzt Nr. 7 -->
     <div class="container-box" id="container-box-7">
@@ -1797,14 +1787,13 @@
                     <h3>Facharzt für <span class="lt_richtung">Orthopädie</span></h3>
                 </div>
             </div>
-            <p>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=Neuwaldegger+Stra%C3%9Fe+2%2C+1170+Wien"
-                    target="_blank">
-                    <span class="icon"><i class="fas fa-map-marker-alt" style="color: #007bff;"></i></span>
-                    Neuwaldegger Straße 2, 1170 Wien
-                </a>
+            <p class="lt_plz">
+                <span class="icon">
+                    <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
+                </span>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Ausstellungsstra%C3%9Fe+7%2F4%2C+Wien"
+                    target="_blank">1040 Wien</a>
             </p>
-
             <p><a href="tel:018123934"><span class="icon"><i class="fas fa-phone"></i></span>01 8123934</a></p>
             <p><a href="tel:+4366002711523"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 660
                     02711523</a></p>
@@ -1814,6 +1803,7 @@
             <p><span class="icon"><i class="fas fa-comments"></i></span>Deutsch, Französisch</p>
             <button class="bewertungen-button" onclick="toggleBewertungen(7)">Bewertungen
                 anschauen</button>
+
 
             <div id="bewertungenContainer-7" class="bewertungen-container" style="display: none;">
                 <!-- Realistic Bewertungen with small and rounded user icons -->
@@ -1900,7 +1890,6 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
-            <p></p>
 
             <div class="button-container">
                 <button onclick="buchungSpeichern(7)">Termin buchen</button>
@@ -1956,14 +1945,13 @@
                     <h3>Fachärztin für <span class="lt_richtung">Neurologie</span></h3>
                 </div>
             </div>
-            <p>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=Otto-Bauer-Gasse+15%2F8%2C+1060+Wien"
-                    target="_blank">
-                    <span class="icon"><i class="fas fa-map-marker-alt" style="color: #007bff;"></i></span>
-                    Otto-Bauer-Gasse 15/8, 1060 Wien
-                </a>
+            <p class="lt_plz">
+                <span class="icon">
+                    <i class="fas fa-map-marker-alt" style="color: #007bff;"></i>
+                </span>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Ausstellungsstra%C3%9Fe+7%2F4%2C+Wien"
+                    target="_blank">1060 Wien</a>
             </p>
-
             <p><a href="tel:013821773"><span class="icon"><i class="fas fa-phone"></i></span>01 3821773</a></p>
             <p><a href="tel:+4366501822436"><span class="icon"><i class="fas fa-mobile-alt"></i></span>+43 665
                     01822436</a></p>
@@ -2052,7 +2040,6 @@
             <h3>Notiz für den Arzt</h3>
             <textarea id="notiz-8" placeholder="Hinterlassen Sie eine Notiz für den Arzt"></textarea>
             <p></p>
-
             <h3>Wählen Sie ihre Untersuchung aus</h3>
             <select id="appointmentType-8" class="custom-select">
                 <option value="Erstuntersuchung">Erstuntersuchung</option>
@@ -2060,7 +2047,6 @@
                 <option value="Allergieuntersuchung">Allergieuntersuchung</option>
             </select>
             <span class="custom-select-arrow"><i class="fa fa-chevron-down"></i></span>
-            <p></p>
 
             <div class="button-container">
                 <button onclick="buchungSpeichern(8)">Termin buchen</button>

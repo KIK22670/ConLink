@@ -96,7 +96,8 @@ create TABLE IF NOT EXISTS u_userverwaltung (
   u_rolle VARCHAR(45),
   verified BOOLEAN,
   verification_token VARCHAR(255),
-  password_reset_token VARCHAR(255),
+  resetpasswordtoken VARCHAR(255),
+  resetpasswordexpires TIMESTAMP WITHOUT TIME ZONE,
   u_p_id INT REFERENCES p_patienten(p_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   u_a_id INT REFERENCES a_aerzte(a_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
@@ -115,7 +116,7 @@ VALUES
 ('Dr', 'Marie', 'Effner', 'marie.effnerh@example.com', '987654321', 'Kardiologin', '1100', 'Wien', 15, NULL),
 ('Dr. med.', 'Michael', 'Jordan', 'michael.jordan@example.com', '555555555', 'Hautarzt', '1120', 'Wien', 12, NULL),
 ('Dr. med.', 'Julia', 'Schmidt', 'julia.schmidt@example.com', '111111111', 'Kinderärztin', '1010', 'Wien', 8, 'Dr. med.'),
-('Dr. med.', 'Michael', 'Müller', 'michael.mueller@example.com', '222222222', 'Onkologe', '1020', 'Wien', 20, 'Dr. med.'),
+('Dr. med.', 'Michael', 'Mueller', 'michael.mueller@example.com', '222222222', 'Onkologe', '1020', 'Wien', 20, 'Dr. med.'),
 ('Dr. med.', 'Anna', 'Wagner', 'anna.wagner@example.com', '333333333', 'Psychiaterin', '1030', 'Wien', 15, 'Dr. med., Psychiatrie'),
 ('Dr', 'Christoph', 'Becker', 'christoph.becker@example.com', '444444444', 'Orthopäde', '1040', 'Wien', 18, NULL),
 ('Dr. med.', 'Laura', 'Hofmann', 'laura.hofmann@example.com', '481910519', 'Neurologin', '1050', 'Wien', 12, 'Dr. med., Neurologie');
