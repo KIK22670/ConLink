@@ -13,6 +13,9 @@ const { use } = require('passport');
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config();
 
+// <a href="https://conlink-9cd090f32e8a.herokuapp.com/verify-email/${verificationToken}">Verify Email</a>
+//<a href="https://conlink-9cd090f32e8a.herokuapp.com/reset-password/${token}">Verify Email</a>
+
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -118,7 +121,7 @@ const emailVerificationTemplate = (verificationToken) => `
             <div class="card-body">
                 <p>Bitte klicken Sie auf den folgenden Link, um Ihre E-Mail-Adresse zu verifizieren:</p>
                 <div class="verification-link">
-                    <a href="https://conlink-9cd090f32e8a.herokuapp.com/verify-email/${verificationToken}">Verify Email</a>
+                <a href="https://conlink-9cd090f32e8a.herokuapp.com/verify-email/${verificationToken}">Verify Email</a>
                 </div>
             </div>
         </div>
@@ -210,7 +213,7 @@ const resetPasswordTemplate = (token) => `
             <div class="card-body">
                 <p>Bitte klicken Sie auf den folgenden Link, um Ihr Passwort zurückzusetzen</p>
                 <div class="verification-link">
-                    <a href="https://conlink-9cd090f32e8a.herokuapp.com/reset-password/${token}">Verify Email</a>
+                <a href="https://conlink-9cd090f32e8a.herokuapp.com/reset-password/${token}">Verify Email</a>
                 </div>
             </div>
         </div>
